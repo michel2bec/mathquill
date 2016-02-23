@@ -6,6 +6,9 @@ by [Han][], [Jeanine][], and [Mary][] (maintainers@mathquill.com)
 [Jeanine]: http://github.com/jneen
 [Mary]: http://github.com/stufflebear
 
+*** SINALYS version ****
+
+
 Good news! We've resumed active development and we're committed to getting
 things running smoothly. Find a dusty corner? Let us know in [Slack][]!
 (Prefer IRC? We're #mathquill on Freenode.)
