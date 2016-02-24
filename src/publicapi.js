@@ -166,6 +166,40 @@ function getInterface(v) {
       else cursor.parent.write(cursor, cmd);
       if (ctrlr.blurred) cursor.hide().parent.blur();
       return this;
+  };
+  /**
+   * Command for merging somewhat complex LaTeX expressions into an existing expression (able to use selection as hint for placement of the inserted LaTeX, if no selection, it's an insert)
+   * convention :
+   * 1) use the current selection to replace {#} ( for instance \\sqrt{[]}{#} : a user would expect this nth root to be put the selection in the body, not in the exponent. Other example : \\sum_{}^{}({#}) )
+   * 2) use the current selection to replace the first {} encountered ( for instance this allow a upperlower button {}_{}^{}, the default behavior targets the superscript )
+   * @param {} cmd latex text with {} or {#}
+   * @returns {} nothing
+   */
+    _.merge = function( cmd ) {
+      var ctrlr = this.__controller.notify(), cursor = ctrlr.cursor;
+      var ix0 = cmd.indexOf("{#}");
+      if (ix0 > -1) {
+        var cmd0 = cmd.slice( 0, ix0 + 1 );
+        var cmd1 = cmd.slice( ix0 + 2 );
+        if (cursor.selection) {
+         var dansSel = cursor.selection.join( 'latex' );
+          this.write( cmd0 + dansSel + cmd1 );
+        } else {
+          this.write( cmd0 + cmd1 );
+        }
+      } else {
+        ix0 = cmd.indexOf( "{}" );
+        if (ix0 > -1) {
+          var cmd0 = cmd.slice( 0, ix0 + 1 );
+          var cmd1 = cmd.slice( ix0 + 1 );
+          if (cursor.selection) {
+            var dansSel = cursor.selection.join( 'latex' );
+            this.write( cmd0 + dansSel + cmd1 );
+          } else {
+            this.write( cmd0 + cmd1 );
+          }
+        }
+      }
     };
     _.select = function() {
       var ctrlr = this.__controller;

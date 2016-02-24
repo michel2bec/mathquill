@@ -18,7 +18,10 @@ Controller.open(function(_) {
       ctrlr.blurred = true;
       blurTimeout = setTimeout(function() { // wait for blur on window; if
         root.postOrder('intentionalBlur'); // none, intentional blur: #264
-        cursor.clearSelection();
+        // BCV 2015/12/21 - incompatible with clic on button for cmd() and incoherent : 
+        // 1) type abc, select it, type \sqrt gives \sqrt{abc},
+        // 2) mouse select abc, issue cmd('\\sqrt') via button gives abc\sqrt{} because the selection is killed.
+        // cursor.clearSelection(); 
         blur();
       });
       $(window).on('blur', windowBlur);
