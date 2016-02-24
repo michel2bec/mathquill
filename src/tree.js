@@ -99,6 +99,24 @@ var Node = P(function(_) {
 
   _.toString = function() { return '{{ MathQuill Node #'+this.id+' }}'; };
 
+  _.logConsole = function () {
+    console.log('Node : ' + this.id + ' p:' + this.parent + ' L: '  + this[L] + ' R: '  + this[R] + ' ends: '  + (this.ends?('L'+this.ends[L]+':R'+this.ends[R]):'null') + ' ctrlSeq:' +this.ctrlSeq + (this.sub?' sub:' +this.sub:'')+ (this.supsub?(' supsub:' +this.supsub):'')+ (this.jQ?(' jQ[0]:' +this.jQ[0]):'')+ (this.htmlTemplate?(' htmlTemplate:' +this.htmlTemplate):''));
+    this.eachChild( function() {
+      this.logConsole();
+      });
+  };
+  
+  _.logConsoleAll = function () {
+    var b = Node.byId;
+    console.log( b );
+    console.log( Object.keys( b ) );
+    for (var p in b) {
+      if( b.hasOwnProperty(p) ) {
+        console.log( Node.byId[p] );
+      } 
+    }
+  };
+  
   _.jQ = $();
   _.jQadd = function(jQ) { return this.jQ = this.jQ.add(jQ); };
   _.jQize = function(jQ) {

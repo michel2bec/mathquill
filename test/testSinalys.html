@@ -44,15 +44,21 @@ code span {
 
 <p>Latex source: <textarea id="latex-source" style="width:80%;vertical-align:top"></textarea></p>
 </div>
-<button id="bSqrtCmd" onclick="window.HandleCmd('\\sqrt');">\\sqrt</button>
-<button id="bSqrtCmd" onclick="window.HandleWrite('=');">=</button>
-<button id="bSqrtCmd" onclick="window.HandleMerge('\\sqrt[{}]{#}');">\\sqrt[{}]{&#x25A1;}</button>
-<button id="bSqrtCmd" onclick="window.HandleMerge('{#}^{}');">{&#x25A1;}^{}</button>
-<button id="bSqrtCmd" onclick="window.HandleMerge('{#}_{}');">{&#x25A1;}_{}</button>
-<button id="bSqrtCmd" onclick="window.HandleMerge('{#}_{}^{}');">{&#x25A1;}_{}^{}</button>
-<button id="bSqrtCmd" onclick="window.HandleMerge('({})');">(&#x25A1;)</button>
-<button id="bSqrtCmd" onclick="window.HandleMerge('{#}_{}^{}');">{&#x25A1;}_{}^{}</button>
-
+<div>
+<button id="b01" onclick="window.HandleCmd('\\sqrt');">\\sqrt</button>
+<button id="b02" onclick="window.HandleWrite('=');">=</button>
+<button id="b03" onclick="window.HandleMerge('\\sqrt[{}]{#}');">\\sqrt[{}]{&#x25A1;}</button>
+<button id="b04" onclick="window.HandleMerge('{#}^{}');">{&#x25A1;}^{}</button>
+<button id="b05" onclick="window.HandleMerge('{#}_{}');">{&#x25A1;}_{}</button>
+<button id="b06" onclick="window.HandleMerge('{#}_{}^{}');">{&#x25A1;}_{}^{}</button>
+<button id="b07" onclick="window.HandleMerge('({})');">(&#x25A1;)</button>
+<button id="b08" onclick="window.HandleMerge('{#}_{}^{}');">{&#x25A1;}_{}^{}</button>
+<button id="b09" onclick="window.HandleMerge('{#}_{}^{}');">{&#x25A1;}_{}^{}</button>
+</div>
+<div>
+<button id="bLog1" onclick="window.logConsole('#editable-math-2');">logConsole</button>
+<button id="bLog2" onclick="window.logConsoleAll('#editable-math-2');">logConsoleAll</button>
+</div>
 <script type="text/javascript" src="support/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../build/mathquill.js"></script>
 <script type="text/javascript">
@@ -74,9 +80,6 @@ $(function() {
     setTimeout(function() {
       var latex = latexMath.latex();
       latexSource.val(latex);
-//      location.hash = '#'+latex; //extremely performance-crippling in Chrome for some reason
-      htmlSource.text(printTree(latexMath.html()));
-      htmlTransplantExample.html(latexMath.html());
     });
   }).keydown();
   latexMath.focus();
@@ -87,8 +90,6 @@ $(function() {
       var newtext = latexSource.val();
       if(newtext !== oldtext) {
         latexMath.latex(newtext);
-        htmlSource.text(printTree(latexMath.html()));
-        htmlTransplantExample.html(latexMath.html());
       }
     });
   });
@@ -111,6 +112,14 @@ function HandleMerge(cmd) {
 	var mathField = MQ.MathField($('#editable-math')[0]);
 	mathField.merge(cmd);
 	mathField.focus();
+}
+function logConsole(who) {
+	var mathField = MQ.MathField($(who)[0]);
+	mathField.__controller.root.logConsole();
+}
+function logConsoleAll(who) {
+	var mathField = MQ.MathField($(who)[0]);
+	mathField.__controller.root.logConsoleAll();
 }
 </script>
 </body>

@@ -113,5 +113,8 @@ function bind(cons /*, args... */) {
  * name.
  */
 function pray(message, cond) {
-  if (!cond) throw new Error('prayer failed: '+message);
+  if (!cond) {
+    console.log( 'prayer failed: '+message );
+    throw new Error('prayer failed: '+message);
+  }
 }
