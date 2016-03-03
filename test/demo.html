@@ -60,6 +60,10 @@ code span {
 <p>This button runs the JavaScript code written on it to MathQuill-ify the following <code>&lt;span&gt;</code> element into an editable math textbox: <button onclick="$(this).text('MQ(this.nextSibling).revert()'); MQ.MathField(this.nextSibling); var orig = arguments.callee; this.onclick = function(){ $(this).text('MQ.MathField(this.nextSibling)'); MQ(this.nextSibling).revert(); this.onclick = orig; };">MQ.MathField(this.nextSibling)</button><span>\frac{d}{dx}\sqrt{x} = \frac{d}{dx}x^{\frac{1}{2}} = \frac{1}{2}x^{-\frac{1}{2}} = \frac{1}{2\sqrt{x}}</span></p>
 
 </div>
+<div>
+<button id="bLog1" onclick="window.logConsole('#editable-math');">logConsole</button>
+<button id="bLog2" onclick="window.logConsoleAll('#editable-math');">logConsoleAll</button>
+</div>
 <script type="text/javascript" src="support/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../build/mathquill.js"></script>
 <script type="text/javascript">
@@ -140,6 +144,14 @@ function printTree(html) {
     tree.push(token);
   }
   return tree.join('').slice(1);
+}
+function logConsole(who) {
+	var mathField = MQ.MathField($(who)[0]);
+	mathField.__controller.root.logConsole();
+}
+function logConsoleAll(who) {
+	var mathField = MQ.MathField($(who)[0]);
+	mathField.__controller.root.logConsoleAll();
 }
 </script>
 </body>

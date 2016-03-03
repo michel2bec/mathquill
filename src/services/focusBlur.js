@@ -21,7 +21,7 @@ Controller.open(function(_) {
         // BCV 2015/12/21 - incompatible with clic on button for cmd() and incoherent : 
         // 1) type abc, select it, type \sqrt gives \sqrt{abc},
         // 2) mouse select abc, issue cmd('\\sqrt') via button gives abc\sqrt{} because the selection is killed.
-        // cursor.clearSelection(); 
+        // cursor.clearSelection().endSelection(); 
         blur();
       });
       $(window).on('blur', windowBlur);

@@ -40,9 +40,10 @@ code span {
 
 <p>Math textbox with initial LaTeX: <span id="editable-math" class="mathquill-math-field">\frac{d}{dx}\sqrt{x}=</span></p>
 
-<p>Math textbox with problematic LaTeX (for SINALYS) LaTeX: <span id="editable-math-2" class="mathquill-math-field">{{ab}^{cd}}^{ef}</span></p>
+<p>Math textbox with problematic (for SINALYS) LaTeX: <span id="editable-math-2" class="mathquill-math-field">{{ab}^{cd}}^{ef}+{{{ij}^{kl}}^{mn}}^{op}+{{{{qr}^{st}}^{uv}}^{wx}}^{yz}+{\left(a^{1^{2^{3^{4^5}}}}+a^{1^{2^{3}}}\right)^h}^a_b+\left(\left(a^1\right)^2\right)_2^3</span></p>
 
 <p>Latex source: <textarea id="latex-source" style="width:80%;vertical-align:top"></textarea></p>
+<p>Latex source 2 : <textarea id="latex-source-2" style="width:80%;vertical-align:top"></textarea></p>
 </div>
 <div>
 <button id="b01" onclick="window.HandleCmd('\\sqrt');">\\sqrt</button>
@@ -73,6 +74,7 @@ $(function() {
 var latexMath = $('#editable-math');
 var latexMath2 = $('#editable-math-2');
 var latexSource = $('#latex-source');
+var latexSource2 = $('#latex-source-2');
 var bSqrtCmd = $('#bSqrtCmd');
 $(function() {
   var latexMath = MQ($('#editable-math')[0]);
@@ -96,6 +98,25 @@ $(function() {
 
   if(location.hash && location.hash.length > 1)
     latexMath.latex(decodeURIComponent(location.hash.slice(1))).focus();
+
+  var latexMath2 = MQ($('#editable-math-2')[0]);
+  $(latexMath2.el()).bind('keydown keypress', function() {
+    setTimeout(function() {
+      var latex = latexMath2.latex();
+      latexSource2.val(latex);
+    });
+  }).keydown();
+  latexMath2.focus();
+
+  latexSource2.bind('keydown keypress', function() {
+    var oldtext = latexSource2.val();
+    setTimeout(function() {
+      var newtext = latexSource2.val();
+      if(newtext !== oldtext) {
+        latexMath2.latex(newtext);
+      }
+    });
+  });
 });
 
 function HandleCmd(cmd) {

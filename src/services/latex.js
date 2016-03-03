@@ -7,14 +7,38 @@ var latexMathParser = (function() {
   }
   function joinBlocks(blocks) {
     var firstBlock = blocks[0] || MathBlock();
-
+  var ret = [firstBlock];
+  var j = 0;
     for (var i = 1; i < blocks.length; i += 1) {
-      blocks[i].children().adopt(firstBlock, firstBlock.ends[R], 0);
+     if( blocks[i].ctrlSeqEx == '{' || (!blocks[i].ctrlSeq && !blocks[i].ctrlSeqEx && blocks[i-1].ctrlSeqEx == '{')) {
+       ret[j] = firstBlock;
+       firstBlock = blocks[i];
+       j++;
+       ret[j] = firstBlock;
+     }
+     else
+    blocks[i].children().adopt(firstBlock, firstBlock.ends[R], 0);
     }
-
+  if( ret.length == 1 )
+    return ret[0];
+  firstBlock = MathBlock();
+  for (var i = 0; i < ret.length; i += 1) {
+    if( !(ret[i].ctrlSeqEx && !ret[i].ctrlSeq) )
+      ret[i].children().adopt(firstBlock, firstBlock.ends[R], 0);
+    else
+      ret[i].adopt(firstBlock, firstBlock.ends[R], 0);
+  }
     return firstBlock;
   }
-
+  /**
+    * Here I want to preserve input LaTeX as much as possible ab{cd} must not become abcd
+    * need to tag already existing {} vs implicit ones.
+    */
+  function collapseToExplicitMathBlock(blocks) {
+    var firstBlock = ExplicitMathBlock();
+    blocks.children().adopt(firstBlock, firstBlock.ends[R], 0);
+    return firstBlock;
+  }
   var string = Parser.string;
   var regex = Parser.regex;
   var letter = Parser.letter;
@@ -52,7 +76,7 @@ var latexMathParser = (function() {
   ;
 
   // Parsers yielding MathBlocks
-  var mathGroup = string('{').then(function() { return mathSequence; }).skip(string('}'));
+  var mathGroup = string('{').then(function() { return mathSequence.map(collapseToExplicitMathBlock); }).skip(string('}'));
   var mathBlock = optWhitespace.then(mathGroup.or(command.map(commandToBlock)));
   var mathSequence = mathBlock.many().map(joinBlocks).skip(optWhitespace);
 

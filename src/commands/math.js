@@ -15,6 +15,7 @@ var MathElement = P(Node, function(_, super_) {
     self.postOrder('finalizeTree', options);
     self.postOrder('contactWeld', cursor);
 
+    self.postOrder('applyStackedDepth');
     // note: this order is important.
     // empty elements need the empty box provided by blur to
     // be present in order for their dimensions to be measured
@@ -452,6 +453,45 @@ API.StaticMath = function(APIClasses) {
     };
   });
 };
+
+/**
+* Here I want to preserve input LaTeX as much as possible ab{cd} must not become abcd
+* need to tag already existing {} vs implicit ones.
+*/
+var ExplicitMathBlock = P(MathBlock, function(_, super_) {
+  _.init = function() {
+    var cmd = this;
+    super_.init.call(cmd);
+    cmd.ctrlSeqEx = '{';
+  };
+  _.html = function() { 
+    return '<span class="mq-non-leaf" mathquill-block-id=' + this.id + '>' + this.join('html') + '</span>';
+  };
+  _.latex = function() { 
+    return '{' + this.join('latex') + '}';
+  };
+  
+  // editability methods: called by the cursor for editing, cursor movements,
+  // and selection of the MathQuill tree, these all take in a direction and
+  // the cursor
+  _.moveTowards = function (dir, cursor) {
+    cursor.insAtDirEnd(-dir, this);
+  };
+  _.moveOutOf = function (dir, cursor, updown) {
+    var updownInto = updown && this.parent[updown + 'Into'];
+    if (!updownInto && this[dir]) {
+      if (this[dir].focus) { // élément voisin est conteneur
+        cursor.insAtDirEnd(-dir, this[dir]);
+      } else { // est non conteneur
+        cursor.insDirOf(dir, this[dir]);
+      }
+    }
+    else cursor.insDirOf(dir, this.parent);
+  };
+  // TODO: make these methods part of a shared mixin or something.
+  _.selectTowards = MathCommand.prototype.selectTowards;
+  _.deleteTowards = MathCommand.prototype.deleteTowards;
+});
 
 var RootMathBlock = P(MathBlock, RootBlockMixin);
 API.MathField = function(APIClasses) {

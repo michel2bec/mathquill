@@ -116,7 +116,6 @@ var Node = P(function(_) {
       } 
     }
   };
-  
   _.jQ = $();
   _.jQadd = function(jQ) { return this.jQ = this.jQ.add(jQ); };
   _.jQize = function(jQ) {
