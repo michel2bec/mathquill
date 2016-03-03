@@ -139,43 +139,10 @@ var SupSub = P(MathCommand, function(_, super_) {
     if (!cursor[L] && cursor.options.supSubsRequireOperand) return;
     return super_.createLeftOf.apply(this, arguments);
   };
-  _.applyStackedDepth0 = function() {
-    // get reference element for stacking (TODO : right sub/supscripts which are a mess in LaTeX)
-    var parentId = this.parent.id;
-    var previous = this[L];
-    // find all sup / sub elements via DOM
-    var subsup = previous.jQ.find( ".mq-supsub" );
-    var dM = 1;
-    if( subsup.length > 0 ) {
-      for( var i=0; i<subsup.length; i++ ) {
-        var cmdId = (subsup[i]).getAttribute('mathquill-command-id');
-        //var blockId = el.getAttribute('mathquill-block-id');
-        var d = 1;
-        if (cmdId) {      
-          var node = Node.byId[cmdId];
-          while ( node && node.id !== parentId ) {
-            if( node instanceof SupSub ) {
-              d++;
-              if( node[L] )
-                node = node[L];
-              else
-                node = node[R];
-            } else 
-              node = node.parent;
-          }
-          if( d > dM ) 
-            dM = d;
-        }
-      }
-    }
-    dM = dM * 0.5;
-    this.jQ.css( 'vertical-align', dM + 'em' );
-    this.jQ.children( 'mq-sub' ).css( 'top', (2.0*dM) + 'em' );
-  };
   _.applyStackedDepth = function() {
     var dM = this.computeStackedDepth( 1 )*0.5;
     this.jQ.css( 'vertical-align', dM + 'em' );
-    this.jQ.children( 'mq-sub' ).css( 'top', (2.0*dM) + 'em' );
+    this.jQ.children( '.mq-sub' ).css( 'margin-top', (2.0*dM) + 'em' );
   };
   _.computeStackedDepth = function( level ) {
     // get reference element for stacking (TODO : right sub/supscripts which are a mess in LaTeX)
