@@ -506,6 +506,77 @@ var Vec = LatexCmds.vec = P(MathCommand, function(_, super_) {
   _.textTemplate = ['vec(', ')'];
 });
 
+var UnderRightArrow =
+LatexCmds.underrightarrow = P(MathCommand, function (_, super_) {
+	_.ctrlSeq = "\\underrightarrow";
+	_.htmlTemplate = '<span class="mq-non-leaf">'
+		+ '<span class="mq-vector-stem">&0</span>'
+		+ '<span class="mq-scaled mq-vector-prefix">&rarr;</span>'
+		+ "</span>";
+	_.textTemplate = ["underright(", ")"];
+	_.reflow = function () {
+		var _ = this.ends[R].jQ;
+		var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
+		scale(_.next(), _super * .8, 1.25)
+	}
+});
+var OverRightArrow =
+	LatexCmds.overrightarrow = P(MathCommand, function (_, super_ ) {
+		_.ctrlSeq = "\\overrightarrow";
+		_.htmlTemplate = '<span class="mq-non-leaf">'
+			+ '<span class="mq-scaled mq-vector-prefix">&rarr;</span>' 
+			+ '<span class="mq-vector-stem">&0</span>' + "</span>";
+		_.textTemplate = ["overright(", ")"];
+		_.reflow = function () {
+			var _ = this.ends[R].jQ;
+			var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
+			scale(_.prev(), _super * .8, 1.25)
+		}
+	});
+var Hat = LatexCmds.hat = P(MathCommand, function (_, super_ ) {
+	_.ctrlSeq = "\\hat";
+	_.htmlTemplate = '<span class="mq-non-leaf">'
+		+ '<span class="mq-vector-prefix">&#94;</span>'
+		+ '<span class="mq-vector-stem">&0</span>'
+		+ "</span>";
+	_.textTemplate = ["hat{", "}"]
+});
+var WideHat = LatexCmds.widehat = P(MathCommand, function (_, super_) {
+	_.ctrlSeq = "\\widehat";
+	_.htmlTemplate = '<span class="mq-non-leaf">'
+		+ '<span class="mq-vector-prefix">&#94;</span>'
+		+ '<span class="mq-vector-stem">&0</span>'
+		+ "</span>";
+	_.textTemplate = ["widehat{", "}"];
+	_.reflow = function () {
+		var _ = this.ends[R].jQ;
+		var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
+		scale(_.prev(), _super * .8, 1.25)
+	};
+});
+var Tilde = LatexCmds.tilde = P(MathCommand, function (_, super_) {
+	_.ctrlSeq = "\\tilde";
+	_.htmlTemplate = '<span class="mq-non-leaf">'
+		+ '<span class="mq-vector-prefix">&#126;</span>'
+		+ '<span class="mq-vector-stem">&0</span>'
+		+ "</span>";
+	_.textTemplate = ["tilde{", "}"];
+});
+var WideTilde = LatexCmds.widetilde = P(MathCommand, function (_, super_) {
+	_.ctrlSeq = "\\widetilde";
+	_.htmlTemplate = 
+			'<span class="mq-non-leaf">'
+		+	'<span class="mq-vector-prefix">&#126;</span>'
+		+	'<span class="mq-vector-stem">&0</span>'
+		+	"</span>";
+	_.textTemplate = ["widetilde{", "}"];
+	_.reflow = function () {
+		var _ = this.ends[R].jQ;
+		var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
+		scale(_.prev(), _super * .8, 1.25)
+	};
+});
+
 var NthRoot =
 LatexCmds.nthroot = P(SquareRoot, function(_, super_) {
   _.htmlTemplate =

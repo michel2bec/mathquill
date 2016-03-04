@@ -12,6 +12,8 @@ LatexCmds.otimes = P(BinaryOperator, function(_, super_) {
   };
 });
 
+LatexCmds["\u2571"] = LatexCmds.diagup = bind(BinaryOperator, "\\diagup ", "&#x2571;");
+LatexCmds["\u2572"] = LatexCmds.diagdown = bind(BinaryOperator, "\\diagdown ", "&#x2572;");
 LatexCmds['≠'] = LatexCmds.ne = LatexCmds.neq = bind(BinaryOperator,'\\ne ','&ne;');
 
 LatexCmds.ast = LatexCmds.star = LatexCmds.loast = LatexCmds.lowast =
