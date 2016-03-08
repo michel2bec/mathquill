@@ -28,6 +28,9 @@ code span {
 .mq-math-mode .mq-editable-field {
   min-width: 1cm;
 }
+.mathquill-math-static-field {
+  border: .2em solid #0A00B0;
+}
 </style>
 
 </head>
@@ -57,6 +60,15 @@ code span {
 <button id="b09" onclick="window.HandleMerge('{#}_{}^{}');">{&#x25A1;}_{}^{}</button>
 </div>
 <div>
+  <span class="mathquill-math-static-field">{\underset{\mathrm{SP2}}{\mathrm{Constante}}}_{A}</span>
+  <span class="mathquill-math-static-field">\underset{\mathrm{SP2}}{{\mathrm{Constante}}_{\mathrm{pos}}^{\mathrm{nbre}}}</span>
+  <span class="mathquill-math-static-field">\overset{^}{\mathrm{underscore}}</span>
+  <span class="mathquill-math-static-field">\underset{\mathrm{SP2}}{{\mathrm{Constante}}_{\mathrm{pos}}^{\mathrm{nbre}}}</span>
+  <span class="mathquill-math-static-field">{{}^{\mathrm{StandEx}}\mathrm{NonVie}}_{\mathrm{rte}}</span>
+  <span class="mathquill-math-static-field">{\underrightarrow{a}}^1_2 +a/b+\frac{a}{b}+\underset{u}{a}+\overset{o}{a}</span>
+    <span class="mathquill-math-static-field">{_{_{_{f1}{e2}}{d3}}^{^{^ih}g}0_{1_{2_3}}^{a^{b^c}}}</span>
+</div>
+<div>
 <button id="bLog1" onclick="window.logConsole('#editable-math-2');">logConsole</button>
 <button id="bLog2" onclick="window.logConsoleAll('#editable-math-2');">logConsoleAll</button>
 </div>
@@ -64,12 +76,17 @@ code span {
 <script type="text/javascript" src="../build/mathquill.js"></script>
 <script type="text/javascript">
 MQ = MathQuill.getInterface(MathQuill.getInterface.MAX);
-
-//on document ready, mathquill-ify all `<tag class="mathquill-*">latex</tag>`
-//elements according to their CSS class.
-$(function() {
-  $('.mathquill-math-field').each(function() { MQ.MathField(this); });
-});
+MQ.config( {
+  spaceBehavesLikeTab: true,
+  leftRightIntoCmdGoes: 'up',
+  restrictMismatchedBrackets: true,
+  sumStartsWithNEquals: false,
+  supSubsRequireOperand: true,
+  charsThatBreakOutOfSupSub: '+-=<>',
+  autoSubscriptNumerals: false,
+  autoCommands: 'RienDuRout',
+  autoOperatorNames: 'RienDuRout'
+} );
 
 var latexMath = $('#editable-math');
 var latexMath2 = $('#editable-math-2');
@@ -77,6 +94,8 @@ var latexSource = $('#latex-source');
 var latexSource2 = $('#latex-source-2');
 var bSqrtCmd = $('#bSqrtCmd');
 $(function() {
+  $('.mathquill-math-field').each(function() { MQ.MathField(this); });
+  $('.mathquill-math-static-field').each(function() { MQ.StaticMath(this); });
   var latexMath = MQ($('#editable-math')[0]);
   $(latexMath.el()).bind('keydown keypress', function() {
     setTimeout(function() {

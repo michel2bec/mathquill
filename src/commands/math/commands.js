@@ -141,8 +141,12 @@ var SupSub = P(MathCommand, function(_, super_) {
   };
   _.applyStackedDepth = function() {
     var dM = this.computeStackedDepth( 1 )*0.5;
-    this.jQ.css( 'vertical-align', dM + 'em' );
-    this.jQ.children( '.mq-sub' ).css( 'margin-top', (2.0*dM) + 'em' );
+    if( this['sub'] ) {
+      this.jQ.css( 'vertical-align', ( dM - 1.0 )+ 'em' );
+      this.jQ.children( '.mq-sub' ).css( 'margin-top', (dM-0.5) + 'em' );
+    } else {
+      this.jQ.css( 'vertical-align', dM + 'em' );
+    }
   };
   _.computeStackedDepth = function( level ) {
     // get reference element for stacking (TODO : right sub/supscripts which are a mess in LaTeX)
@@ -352,6 +356,33 @@ LatexCmds['^'] = P(SupSub, function(_, super_) {
   };
 });
 
+var Overset =
+LatexCmds.overset = P(MathCommand, function (_, super_ ) {
+  _.ctrlSeq = "\\overset";
+  _.htmlTemplate = '<span class="mq-over mq-non-leaf">'
+    + '<span class="mq-vector-prefix">&0</span>' 
+    + '<span class="mq-vector-stem">&1</span>'
+    + "</span>";
+  _.textTemplate = ["overset{", "}{",'}'];
+  _.finalizeTree = function() {
+    this.upInto = this.ends[R].upOutOf = this.ends[L];
+    this.downInto = this.ends[L].downOutOf = this.ends[R];
+  };
+});
+var Underset =
+LatexCmds.underset = P(MathCommand, function (_, super_ ) {
+  _.ctrlSeq = "\\underset";
+  _.htmlTemplate = '<span class="mq-under mq-non-leaf">'
+    + '<span class="mq-vector-stem">&1</span>'
+    + '<span class="mq-vector-prefix">&0</span>'
+    + "</span>";
+  _.textTemplate = ["underset{", "}{",'}'];
+  _.finalizeTree = function() {
+    this.upInto = this.ends[R].upOutOf = this.ends[L];
+    this.downInto = this.ends[L].downOutOf = this.ends[R];
+  };
+});
+
 var SummationNotation = P(MathCommand, function(_, super_) {
   _.init = function(ch, html) {
     var htmlTemplate =
@@ -508,73 +539,73 @@ var Vec = LatexCmds.vec = P(MathCommand, function(_, super_) {
 
 var UnderRightArrow =
 LatexCmds.underrightarrow = P(MathCommand, function (_, super_) {
-	_.ctrlSeq = "\\underrightarrow";
-	_.htmlTemplate = '<span class="mq-non-leaf">'
-		+ '<span class="mq-vector-stem">&0</span>'
-		+ '<span class="mq-scaled mq-vector-prefix">&rarr;</span>'
-		+ "</span>";
-	_.textTemplate = ["underright(", ")"];
-	_.reflow = function () {
-		var _ = this.ends[R].jQ;
-		var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
-		scale(_.next(), _super * .8, 1.25)
-	}
+  _.ctrlSeq = "\\underrightarrow";
+  _.htmlTemplate = '<span class="mq-under mq-non-leaf">' // needs -0.5em
+    + '<span class="mq-vector-stem">&0</span>'
+    + '<span class="mq-scaled mq-vector-prefix">&rarr;</span>'
+    + "</span>";
+  _.textTemplate = ["underright(", ")"];
+  _.reflow = function () {
+    var _ = this.ends[R].jQ;
+    var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
+    scale(_.next(), _super * .8, 1.25)
+  }
 });
 var OverRightArrow =
-	LatexCmds.overrightarrow = P(MathCommand, function (_, super_ ) {
-		_.ctrlSeq = "\\overrightarrow";
-		_.htmlTemplate = '<span class="mq-non-leaf">'
-			+ '<span class="mq-scaled mq-vector-prefix">&rarr;</span>' 
-			+ '<span class="mq-vector-stem">&0</span>' + "</span>";
-		_.textTemplate = ["overright(", ")"];
-		_.reflow = function () {
-			var _ = this.ends[R].jQ;
-			var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
-			scale(_.prev(), _super * .8, 1.25)
-		}
-	});
+  LatexCmds.overrightarrow = P(MathCommand, function (_, super_ ) {
+    _.ctrlSeq = "\\overrightarrow";
+    _.htmlTemplate = '<span class="mq-over mq-non-leaf">'
+      + '<span class="mq-scaled mq-vector-prefix">&rarr;</span>' 
+      + '<span class="mq-vector-stem">&0</span>' + "</span>";
+    _.textTemplate = ["overright(", ")"];
+    _.reflow = function () {
+      var _ = this.ends[R].jQ;
+      var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
+      scale(_.prev(), _super * .8, 1.25)
+    }
+  });
 var Hat = LatexCmds.hat = P(MathCommand, function (_, super_ ) {
-	_.ctrlSeq = "\\hat";
-	_.htmlTemplate = '<span class="mq-non-leaf">'
-		+ '<span class="mq-vector-prefix">&#94;</span>'
-		+ '<span class="mq-vector-stem">&0</span>'
-		+ "</span>";
-	_.textTemplate = ["hat{", "}"]
+  _.ctrlSeq = "\\hat";
+  _.htmlTemplate = '<span class="mq-non-leaf">'
+    + '<span class="mq-vector-prefix">&#94;</span>'
+    + '<span class="mq-vector-stem">&0</span>'
+    + "</span>";
+  _.textTemplate = ["hat{", "}"]
 });
 var WideHat = LatexCmds.widehat = P(MathCommand, function (_, super_) {
-	_.ctrlSeq = "\\widehat";
-	_.htmlTemplate = '<span class="mq-non-leaf">'
-		+ '<span class="mq-vector-prefix">&#94;</span>'
-		+ '<span class="mq-vector-stem">&0</span>'
-		+ "</span>";
-	_.textTemplate = ["widehat{", "}"];
-	_.reflow = function () {
-		var _ = this.ends[R].jQ;
-		var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
-		scale(_.prev(), _super * .8, 1.25)
-	};
+  _.ctrlSeq = "\\widehat";
+  _.htmlTemplate = '<span class="mq-non-leaf">'
+    + '<span class="mq-vector-prefix">&#94;</span>'
+    + '<span class="mq-vector-stem">&0</span>'
+    + "</span>";
+  _.textTemplate = ["widehat{", "}"];
+  _.reflow = function () {
+    var _ = this.ends[R].jQ;
+    var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
+    scale(_.prev(), _super * .8, 1.25)
+  };
 });
 var Tilde = LatexCmds.tilde = P(MathCommand, function (_, super_) {
-	_.ctrlSeq = "\\tilde";
-	_.htmlTemplate = '<span class="mq-non-leaf">'
-		+ '<span class="mq-vector-prefix">&#126;</span>'
-		+ '<span class="mq-vector-stem">&0</span>'
-		+ "</span>";
-	_.textTemplate = ["tilde{", "}"];
+  _.ctrlSeq = "\\tilde";
+  _.htmlTemplate = '<span class="mq-non-leaf">'
+    + '<span class="mq-vector-prefix">&#126;</span>'
+    + '<span class="mq-vector-stem">&0</span>'
+    + "</span>";
+  _.textTemplate = ["tilde{", "}"];
 });
 var WideTilde = LatexCmds.widetilde = P(MathCommand, function (_, super_) {
-	_.ctrlSeq = "\\widetilde";
-	_.htmlTemplate = 
-			'<span class="mq-non-leaf">'
-		+	'<span class="mq-vector-prefix">&#126;</span>'
-		+	'<span class="mq-vector-stem">&0</span>'
-		+	"</span>";
-	_.textTemplate = ["widetilde{", "}"];
-	_.reflow = function () {
-		var _ = this.ends[R].jQ;
-		var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
-		scale(_.prev(), _super * .8, 1.25)
-	};
+  _.ctrlSeq = "\\widetilde";
+  _.htmlTemplate = 
+      '<span class="mq-non-leaf">'
+    +  '<span class="mq-vector-prefix">&#126;</span>'
+    +  '<span class="mq-vector-stem">&0</span>'
+    +  "</span>";
+  _.textTemplate = ["widetilde{", "}"];
+  _.reflow = function () {
+    var _ = this.ends[R].jQ;
+    var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
+    scale(_.prev(), _super * .8, 1.25)
+  };
 });
 
 var NthRoot =
