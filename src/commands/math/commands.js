@@ -151,20 +151,25 @@ var SupSub = P(MathCommand, function(_, super_) {
   _.computeStackedDepth = function( level ) {
     // get reference element for stacking (TODO : right sub/supscripts which are a mess in LaTeX)
     var previous = this[L];
-    // find all sup / sub elements via DOM
-    var subsup = previous.jQ.find( ".mq-supsub" );
-    var level0 = level;
-    if( subsup.length > 0 ) {
-      for( var i=0; i<subsup.length; i++ ) {
-        var cmdId = (subsup[i]).getAttribute('mathquill-command-id');
-        if (cmdId) {
-          var node = Node.byId[cmdId];
-          var n = this.matriochka( node );
-          var level1 = node.computeStackedDepth( level + n );
-          if( level1 > level0 ) 
-            level0 = level1;
+    if( previous ) {
+      // find all sup / sub elements via DOM
+      var subsup = previous.jQ.find( ".mq-supsub" );
+      var level0 = level;
+      if( subsup.length > 0 ) {
+        for( var i=0; i<subsup.length; i++ ) {
+          var cmdId = (subsup[i]).getAttribute('mathquill-command-id');
+          if (cmdId) {
+            var node = Node.byId[cmdId];
+            var n = this.matriochka( node );
+            var level1 = node.computeStackedDepth( level + n );
+            if( level1 > level0 ) 
+              level0 = level1;
+          }
         }
       }
+    } else {
+      // right against the left border (matriochka case)
+      return level;
     }
     return level0;
   };
