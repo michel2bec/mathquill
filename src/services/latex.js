@@ -56,6 +56,12 @@ var latexMathParser = (function() {
     .or(string('\\').then(
       regex(/^[a-z]+/i)
       .or(regex(/^\s+/).result(' '))
+      // Ajout SINALYS
+      .or(regex(/^[\\\\]/).result("enter"))
+      .or(regex(/^[\\,]/).result("thinspace"))
+      .or(regex(/^[\\;]/).result("thickspace"))
+      .or(regex(/^[\\:]/).result("mediumspace"))
+      // FIN Ajout SINALYS
       .or(any)
     )).then(function(ctrlSeq) {
       var cmdKlass = LatexCmds[ctrlSeq];

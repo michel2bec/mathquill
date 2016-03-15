@@ -43,7 +43,7 @@ code span {
 
 <p>Math textbox with initial LaTeX: <span id="editable-math" class="mathquill-math-field">\frac{d}{dx}\sqrt{x}=</span></p>
 
-<p>Math textbox with problematic (for SINALYS) LaTeX: <span id="editable-math-2" class="mathquill-math-field">{{ab}^{cd}}^{ef}+{{{ij}^{kl}}^{mn}}^{op}+{{{{qr}^{st}}^{uv}}^{wx}}^{yz}+{\left(a^{1^{2^{3^{4^5}}}}+a^{1^{2^{3}}}\right)^h}^a_b+\left(\left(a^1\right)^2\right)_2^3+a^1_2+{a}^1_2</span></p>
+<p>Math textbox with problematic (for SINALYS) LaTeX: <span id="editable-math-2" class="mathquill-math-field">{{ab}^{cd}}^{ef}+{{{ij}^{kl}}^{mn}}^{op}+\\{{{{qr}^{st}}^{uv}}^{wx}}^{yz}+{\left(a^{1^{2^{3^{4^5}}}}+a^{1^{2^{3}}}\right)^h}^a_b+\left(\left(a^1\right)^2\right)_2^3\\+a^1_2+{a}^1_2</span></p>
 
 <p>Latex source: <textarea id="latex-source" style="width:80%;vertical-align:top"></textarea></p>
 <p>Latex source 2 : <textarea id="latex-source-2" style="width:80%;vertical-align:top"></textarea></p>
@@ -66,7 +66,7 @@ code span {
   <span class="mathquill-math-static-field">\underset{\mathrm{SP2}}{{\mathrm{Constante}}_{\mathrm{pos}}^{\mathrm{nbre}}}</span>
   <span class="mathquill-math-static-field">{{}^{\mathrm{StandEx}}\mathrm{NonVie}}_{\mathrm{rte}}</span>
   <span class="mathquill-math-static-field">{\underrightarrow{a}}^1_2 +a/b+\frac{a}{b}+\underset{u}{a}+\overset{o}{a}</span>
-    <span class="mathquill-math-static-field">{_{_{_{f1}{e2}}{d3}}^{^{^ih}g}0_{1_{2_3}}^{a^{b^c}}}</span>
+  <span class="mathquill-math-static-field">{_{_{_{f1}{e2}}{d3}}^{^{^ih}g}0_{1_{2_3}}^{a^{b^c}}}</span>
 </div>
 <div>
 <button id="bLog1" onclick="window.logConsole('#editable-math-2');">logConsole</button>
@@ -85,7 +85,10 @@ MQ.config( {
   charsThatBreakOutOfSupSub: '+-=<>',
   autoSubscriptNumerals: false,
   autoCommands: 'RienDuRout',
-  autoOperatorNames: 'RienDuRout'
+  autoOperatorNames: 'RienDuRout',
+  handlers: {
+    enter: function(mathField) { mathField.write('\\\\'); }
+  }
 } );
 
 var latexMath = $('#editable-math');

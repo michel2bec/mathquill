@@ -115,6 +115,16 @@ case '!':
   return Symbol('\\! ','<span style="margin-right:-.2em"></span>');
 */
 
+LatexCmds.thinspace = bind(VanillaSymbol, "\\, ", "&#8202;");
+LatexCmds.thickspace = bind(VanillaSymbol, "\\; ", "&#160;");
+LatexCmds.mediumspace = bind(VanillaSymbol, "\\: ", "&#8201;");
+var InvCtrl = P(Symbol, function(_, super_) {
+  _.init = function(ch, html, attr) {
+    super_.init.call(this, ch, '<span ' + attr + ' >' + (html||ch) + '</span>');
+  };
+});
+LatexCmds.enter = bind(InvCtrl, '\\\\', '&#0182', 'class="mq-crlf"');
+
 //binary operators
 LatexCmds.diamond = bind(VanillaSymbol, '\\diamond ', '&#9671;');
 LatexCmds.bigtriangleup = bind(VanillaSymbol, '\\bigtriangleup ', '&#9651;');
