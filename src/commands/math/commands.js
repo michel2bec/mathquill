@@ -79,6 +79,10 @@ LatexCmds.mathtt = bind(Style, '\\mathtt', 'span', 'class="mq-monospace mq-font"
 //text-decoration
 LatexCmds.underline = bind(Style, '\\underline', 'span', 'class="mq-non-leaf mq-underline"');
 LatexCmds.overline = LatexCmds.bar = bind(Style, '\\overline', 'span', 'class="mq-non-leaf mq-overline"');
+LatexCmds.overrightarrow = bind(Style, '\\overrightarrow', 'span', 'class="mq-non-leaf mq-overarrow mq-arrow-right"');
+LatexCmds.overleftarrow = bind(Style, '\\overleftarrow', 'span', 'class="mq-non-leaf mq-overarrow mq-arrow-left"');
+LatexCmds.underrightarrow = bind(Style, '\\underrightarrow', 'span', 'class="mq-non-leaf mq-underarrow mq-arrow-right"');
+LatexCmds.underleftarrow = bind(Style, '\\underleftarrow', 'span', 'class="mq-non-leaf mq-underarrow mq-arrow-left"');
 
 // `\textcolor{color}{math}` will apply a color to the given math content, where
 // `color` is any valid CSS Color Value (see [SitePoint docs][] (recommended),
@@ -542,33 +546,20 @@ var Vec = LatexCmds.vec = P(MathCommand, function(_, super_) {
   _.textTemplate = ['vec(', ')'];
 });
 
-var UnderRightArrow =
-LatexCmds.underrightarrow = P(MathCommand, function (_, super_) {
-  _.ctrlSeq = "\\underrightarrow";
-  _.htmlTemplate = '<span class="mq-under mq-non-leaf">' // needs -0.5em
-    + '<span class="mq-vector-stem">&0</span>'
-    + '<span class="mq-scaled mq-vector-prefix">&rarr;</span>'
-    + "</span>";
-  _.textTemplate = ["underright(", ")"];
-  _.reflow = function () {
-    var _ = this.ends[R].jQ;
-    var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
-    scale(_.next(), _super * .8, 1.25)
-  }
-});
-var OverRightArrow =
-  LatexCmds.overrightarrow = P(MathCommand, function (_, super_ ) {
-    _.ctrlSeq = "\\overrightarrow";
-    _.htmlTemplate = '<span class="mq-over mq-non-leaf">'
-      + '<span class="mq-scaled mq-vector-prefix">&rarr;</span>' 
-      + '<span class="mq-vector-stem">&0</span>' + "</span>";
-    _.textTemplate = ["overright(", ")"];
-    _.reflow = function () {
-      var _ = this.ends[R].jQ;
-      var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
-      scale(_.prev(), _super * .8, 1.25)
-    }
-  });
+// var UnderRightArrow =
+// LatexCmds.underrightarrow = P(MathCommand, function (_, super_) {
+  // _.ctrlSeq = "\\underrightarrow";
+  // _.htmlTemplate = '<span class="mq-under mq-non-leaf">' // needs -0.5em
+    // + '<span class="mq-vector-stem">&0</span>'
+    // + '<span class="mq-scaled mq-vector-prefix">&rarr;</span>'
+    // + "</span>";
+  // _.textTemplate = ["underright(", ")"];
+  // _.reflow = function () {
+    // var _ = this.ends[R].jQ;
+    // var _super = _.outerWidth() / +_.css("fontSize").slice(0, -2);
+    // scale(_.next(), _super * .8, 1.25)
+  // }
+// });
 var Hat = LatexCmds.hat = P(MathCommand, function (_, super_ ) {
   _.ctrlSeq = "\\hat";
   _.htmlTemplate = '<span class="mq-non-leaf">'
@@ -903,12 +894,34 @@ LatexCmds.MathQuillMathField = P(MathCommand, function(_, super_) {
   _.text = function(){ return this.ends[L].text(); };
 });
 
-var Embed = P(Symbol, function(_, super_) {
-  _.init = function(options) {
-    super_.init.call(this);
+// Embed arbitrary things
+// Probably the closest DOM analogue would be an iframe?
+// From MathQuill's perspective, it's a Symbol, it can be
+// anywhere and the cursor can go around it but never in it.
+// Create by calling public API method .dropEmbedded(),
+// or by calling the global public API method .registerEmbed()
+// and rendering LaTeX like \embed{registeredName} (see test).
+var Embed = LatexCmds.embed = P(Symbol, function(_, super_) {
+  _.setOptions = function(options) {
     function noop () { return ""; }
     this.text = options.text || noop;
     this.htmlTemplate = options.htmlString || "";
     this.latex = options.latex || noop;
-  }
+    return this;
+  };
+  _.parser = function() {
+    var self = this;
+      string = Parser.string, regex = Parser.regex, succeed = Parser.succeed;
+    return string('{').then(regex(/^[a-z][a-z0-9]*/i)).skip(string('}'))
+      .then(function(name) {
+        // the chars allowed in the optional data block are arbitrary other than
+        // excluding curly braces and square brackets (which'd be too confusing)
+        return string('[').then(regex(/^[-\w\s]*/)).skip(string(']'))
+          .or(succeed()).map(function(data) {
+            return self.setOptions(EMBEDS[name](data));
+          })
+        ;
+      })
+    ;
+  };
 });

@@ -135,7 +135,8 @@ LatexCmds.sqcap = bind(VanillaSymbol, '\\sqcap ', '&#8851;');
 LatexCmds.triangleleft = bind(VanillaSymbol, '\\triangleleft ', '&#8882;');
 LatexCmds.sqcup = bind(VanillaSymbol, '\\sqcup ', '&#8852;');
 LatexCmds.triangleright = bind(VanillaSymbol, '\\triangleright ', '&#8883;');
-LatexCmds.odot = bind(VanillaSymbol, '\\odot ', '&#8857;');
+//circledot is not a not real LaTex command see https://github.com/mathquill/mathquill/pull/552 for more details
+LatexCmds.odot = LatexCmds.circledot = bind(VanillaSymbol, '\\odot ', '&#8857;');
 LatexCmds.bigcirc = bind(VanillaSymbol, '\\bigcirc ', '&#9711;');
 LatexCmds.dagger = bind(VanillaSymbol, '\\dagger ', '&#0134;');
 LatexCmds.ddagger = bind(VanillaSymbol, '\\ddagger ', '&#135;');
@@ -153,6 +154,7 @@ LatexCmds.mid = bind(VanillaSymbol, '\\mid ', '&#8739;');
 LatexCmds.ll = bind(VanillaSymbol, '\\ll ', '&#8810;');
 LatexCmds.gg = bind(VanillaSymbol, '\\gg ', '&#8811;');
 LatexCmds.parallel = bind(VanillaSymbol, '\\parallel ', '&#8741;');
+LatexCmds.nparallel = bind(VanillaSymbol, '\\nparallel ', '&#8742;');
 LatexCmds.bowtie = bind(VanillaSymbol, '\\bowtie ', '&#8904;');
 LatexCmds.sqsubset = bind(VanillaSymbol, '\\sqsubset ', '&#8847;');
 LatexCmds.sqsupset = bind(VanillaSymbol, '\\sqsupset ', '&#8848;');
@@ -163,6 +165,8 @@ LatexCmds.doteq = bind(VanillaSymbol, '\\doteq ', '&#8784;');
 LatexCmds.frown = bind(VanillaSymbol, '\\frown ', '&#8994;');
 LatexCmds.vdash = bind(VanillaSymbol, '\\vdash ', '&#8870;');
 LatexCmds.dashv = bind(VanillaSymbol, '\\dashv ', '&#8867;');
+LatexCmds.nless = bind(VanillaSymbol, '\\nless ', '&#8814;');
+LatexCmds.ngtr = bind(VanillaSymbol, '\\ngtr ', '&#8815;');
 
 //arrows
 LatexCmds.longleftarrow = bind(VanillaSymbol, '\\longleftarrow ', '&#8592;');
@@ -191,7 +195,7 @@ LatexCmds.cdots = bind(VanillaSymbol, '\\cdots ', '&#8943;');
 LatexCmds.vdots = bind(VanillaSymbol, '\\vdots ', '&#8942;');
 LatexCmds.ddots = bind(VanillaSymbol, '\\ddots ', '&#8945;');
 LatexCmds.surd = bind(VanillaSymbol, '\\surd ', '&#8730;');
-LatexCmds.triangle = bind(VanillaSymbol, '\\triangle ', '&#9653;');
+LatexCmds.triangle = bind(VanillaSymbol, '\\triangle ', '&#9651;');
 LatexCmds.ell = bind(VanillaSymbol, '\\ell ', '&#8467;');
 LatexCmds.top = bind(VanillaSymbol, '\\top ', '&#8868;');
 LatexCmds.flat = bind(VanillaSymbol, '\\flat ', '&#9837;');
@@ -203,6 +207,8 @@ LatexCmds.clubsuit = bind(VanillaSymbol, '\\clubsuit ', '&#9827;');
 LatexCmds.diamondsuit = bind(VanillaSymbol, '\\diamondsuit ', '&#9826;');
 LatexCmds.heartsuit = bind(VanillaSymbol, '\\heartsuit ', '&#9825;');
 LatexCmds.spadesuit = bind(VanillaSymbol, '\\spadesuit ', '&#9824;');
+//not real LaTex command see https://github.com/mathquill/mathquill/pull/552 for more details
+LatexCmds.parallelogram = bind(VanillaSymbol, '\\parallelogram ', '&#9649;');
 
 //variable-sized
 LatexCmds.oint = bind(VanillaSymbol, '\\oint ', '&#8750;');
@@ -227,7 +233,6 @@ LatexCmds.lbrack = bind(VanillaSymbol, '[');
 LatexCmds.rbrack = bind(VanillaSymbol, ']');
 
 //various symbols
-
 LatexCmds['∫'] =
 LatexCmds['int'] =
 LatexCmds.integral = bind(Symbol,'\\int ','<big>&int;</big>');
@@ -329,3 +334,4 @@ LatexCmds.cap = LatexCmds.intersect = LatexCmds.intersection =
 LatexCmds.deg = LatexCmds.degree = bind(VanillaSymbol,'^\\circ ','&deg;');
 
 LatexCmds.ang = LatexCmds.angle = bind(VanillaSymbol,'\\angle ','&ang;');
+LatexCmds.measuredangle = bind(VanillaSymbol,'\\measuredangle ','&#8737;');

@@ -10,10 +10,9 @@ by [Han][], [Jeanine][], and [Mary][] (maintainers@mathquill.com)
 
 
 Good news! We've resumed active development and we're committed to getting
-things running smoothly. Find a dusty corner? Let us know in [Slack][]!
-(Prefer IRC? We're #mathquill on Freenode.)
-
-[Slack]: http://slackin.mathquill.com
+things running smoothly.  
+Find a dusty corner? Let us know! <big>[<img alt="slackin.mathquill.com" src="http://slackin.mathquill.com/badge.svg" align="top">](http://slackin.mathquill.com)
+[<img alt="freenode irc: #mathquill" src="https://img.shields.io/badge/%20freenode%20irc%20-%20%23mathquill%20-brightgreen.svg" align="top">](http://webchat.freenode.net/?channels=mathquill)</big>
 
 ## Usage
 
@@ -171,6 +170,7 @@ expose:
     latex: function() { return '\customEmbed'; }
   }
   ```
+* `ᴇxᴘᴇʀɪᴍᴇɴᴛᴀʟ` `.registerEmbed('name', function(id){return options})` allows MathQuill to parse custom embedded objects from latex, where `options` is an object like the one defined above in `.dropEmbedded`. This will parse the following latex into the embedded object you defined: `\embed{name}[id]}`
 
 [on `textarea`s]: http://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-48880622
 [on `input`s]: http://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-34677168

@@ -124,7 +124,7 @@ suite('Public API', function() {
       mq.typedText('qrt');
       assert.equal(mq.text(), '\\sqrt');
     });
-    
+
     test('.text() with complete commands', function() {
       mq.latex('\\sqrt{}');
       assert.equal(mq.text(), 'sqrt()');
@@ -142,6 +142,14 @@ suite('Public API', function() {
       assert.equal(mq.text(), '^');
       mq.latex('3^{4}');
       assert.equal(mq.text(), '3^4');
+      mq.latex('3x+\\ 4');
+      assert.equal(mq.text(), '3*x+ 4');
+      mq.latex('x^2');
+      assert.equal(mq.text(), 'x^2');
+
+      mq.latex('');
+      mq.typedText('*2*3***4');
+      assert.equal(mq.text(), '*2*3***4');
     });
 
     test('.moveToDirEnd(dir)', function() {
@@ -317,6 +325,8 @@ suite('Public API', function() {
       assert.equal(mq.latex(), 'xy^2');
       mq.keystroke('Right Shift-Left Shift-Left Shift-Left').cmd('\\sqrt');
       assert.equal(mq.latex(), '\\sqrt{xy^2}');
+      mq.typedText('*2**');
+      assert.equal(mq.latex(), '\\sqrt{xy^2\\cdot2\\cdot\\cdot}');
     });
 
     test('backslash commands are passed their name', function() {
@@ -754,16 +764,16 @@ suite('Public API', function() {
 
   suite('dropEmbedded', function() {
     test('inserts into empty', function() {
-      var mq = MQ.MathField($('<span>').appendTo('#mock')[0], {});
+      var mq = MQ.MathField($('<span>').appendTo('#mock')[0]);
       mq.dropEmbedded(0, 0, {
-       htmlString: '<span class="test-span">EMBED HTML FN</span>',
-       text: function () { return "embeded text" },
-       latex: function () { return "embeded latex" }
+        htmlString: '<span class="embedded-html"></span>',
+        text: function () { return "embedded text" },
+        latex: function () { return "embedded latex" }
       });
 
-      assert.ok(jQuery('.test-span').length);
-      assert.equal(mq.text(), "embeded text");
-      assert.equal(mq.latex(), "embeded latex");
+      assert.ok(jQuery('.embedded-html').length);
+      assert.equal(mq.text(), "embedded text");
+      assert.equal(mq.latex(), "embedded latex");
 
       $(mq.el()).remove();
     });
@@ -774,7 +784,7 @@ suite('Public API', function() {
       var filler = $('<div>').height(windowHeight);
       filler.insertBefore('#mock');
 
-      var mq = MQ.MathField($('<span>').appendTo('#mock')[0], {});
+      var mq = MQ.MathField($('<span>').appendTo('#mock')[0]);
       mq.typedText("mmmm/mmmm");
       var pos = $(mq.el()).offset();
       var mqx = pos.left;
@@ -783,17 +793,47 @@ suite('Public API', function() {
       mq.el().scrollIntoView();
 
       mq.dropEmbedded(mqx + 30, mqy + 40, {
-       htmlString: '<span class="test-span">EMBED HTML FN</span>',
-       text: function () { return "embeded text" },
-       latex: function () { return "embeded latex" }
+        htmlString: '<span class="embedded-html"></span>',
+        text: function () { return "embedded text" },
+        latex: function () { return "embedded latex" }
       });
 
-      assert.ok(jQuery('.test-span').length);
-      assert.equal(mq.text(), "(m*m*m*m)/(m*m*embeded text*m*m)");
-      assert.equal(mq.latex(), "\\frac{mmmm}{mmembeded latexmm}");
+      assert.ok(jQuery('.embedded-html').length);
+      assert.equal(mq.text(), "(m*m*m*m)/(m*m*embedded text*m*m)");
+      assert.equal(mq.latex(), "\\frac{mmmm}{mmembedded latexmm}");
 
       filler.remove();
       $(mq.el()).remove();
     });
+  });
+
+  test('.registerEmbed()', function() {
+    var calls = 0, data;
+    MQ.registerEmbed('thing', function(data_) {
+      calls += 1;
+      data = data_;
+      return {
+        htmlString: '<span class="embedded-html"></span>',
+        text: function () { return "embedded text" },
+        latex: function () { return "embedded latex" }
+      };
+    });
+    var mq = MQ.MathField($('<span>\\sqrt{\\embed{thing}}</span>').appendTo('#mock')[0]);
+    assert.equal(calls, 1);
+    assert.equal(data, undefined);
+
+    assert.ok(jQuery('.embedded-html').length);
+    assert.equal(mq.text(), "sqrt(embedded text)");
+    assert.equal(mq.latex(), "\\sqrt{embedded latex}");
+
+    mq.latex('\\sqrt{\\embed{thing}[data]}');
+    assert.equal(calls, 2);
+    assert.equal(data, 'data');
+
+    assert.ok(jQuery('.embedded-html').length);
+    assert.equal(mq.text(), "sqrt(embedded text)");
+    assert.equal(mq.latex(), "\\sqrt{embedded latex}");
+
+    $(mq.el()).remove();
   });
 });
