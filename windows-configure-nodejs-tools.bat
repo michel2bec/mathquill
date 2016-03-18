@@ -21,4 +21,6 @@ call npm install gulp-less -g
 call npm link gulp-less
 call npm install del -g
 call npm link del
+call npm install mocha -g
+call npm link mocha
 call npm install pjs@3.1.0 --ignore-scripts

@@ -10,4 +10,5 @@ call npm link gulp-sourcemaps
 call npm link gulp-rename
 call npm link gulp-less
 call npm link del
+call npm link mocha
 call npm install pjs@3.1.0 --ignore-scripts
