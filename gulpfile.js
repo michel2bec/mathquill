@@ -12,6 +12,8 @@ var gulp = require("gulp"),
 		
 var paths = {
 	baseSources: ["./node_modules/pjs/src/p.js","src/tree.js","src/cursor.js","src/controller.js","src/publicapi.js","src/services/*.util.js","src/services/*.js"],
+  commandsSources: ["src/commands/*.js","src/commands/*/*.js"],
+  coreSources: ["src/commands/math.js","src/commands/basicSymbols.js","src/commands/commands.js"],
 	intro: "src/intro.js",
 	outro: "src/outro.js",
 	fullSources: [],
@@ -21,12 +23,14 @@ var paths = {
 	target: "build/",
 	lessc: "./node_modules/.bin/lessc",
   unittest: "test/unit/*.test.js",
-  basicTarget: "mathquill-basic.js"
+  basicTarget: "mathquill-basic.js",
+  testTarget: "mathquill.test.js",
+  normalTarget: "mathquill.js"
 };
 
-paths.fullSources = [paths.intro].concat( paths.baseSources.concat( ["src/commands/*.js","src/commands/*/*.js"] ) ).concat( [paths.outro] );
-paths.basicSources = [paths.intro].concat( paths.baseSources.concat( ["src/commands/math.js","src/commands/basicSymbols.js","src/commands/commands.js"] ) ).concat( [paths.outro] );
-paths.unitTestSources = [paths.intro].concat( paths.baseSources.concat( ["src/commands/*.js","src/commands/*/*.js", paths.unittest] ) ).concat( [paths.outro] );
+paths.fullSources = [paths.intro].concat( paths.baseSources ).concat( paths.commandsSources ).concat( [paths.outro] );
+paths.basicSources = [paths.intro].concat( paths.baseSources ).concat( paths.coreSources ).concat( [paths.outro] );
+paths.unitTestSources = [paths.intro].concat( paths.baseSources ).concat( paths.commandsSources ).concat( [paths.unittest] ).concat( [paths.outro] );
 
 gulp.task( "font", function( cb ) {
 			// copie tel quel
@@ -57,9 +61,9 @@ gulp.task( "css", function( cb ) {
 gulp.task( "build-test", function( cb ) {
 	gulp.src( paths.unitTestSources,
 		{ base: "src/" } )
-		.pipe(g_newer(paths.target + "mathquill.test.js"))
+		.pipe(g_newer(paths.target + paths.testTarget))
 		.pipe( g_sourcemaps.init() )
-		.pipe( g_concat( "mathquill.test.js" ) )
+		.pipe( g_concat( paths.testTarget ) )
 		.pipe( gulp.dest( paths.target ) )
 		.pipe( g_sourcemaps.write( "maps" ) )
 		.pipe( gulp.dest( paths.target ) );
@@ -69,9 +73,9 @@ gulp.task( "build-test", function( cb ) {
 gulp.task( "build+bundle+min", function( cb ) {
 	gulp.src( paths.fullSources,
 		{ base: "src/" } )
-		.pipe(g_newer(paths.target + "mathquill.js"))
+		.pipe(g_newer(paths.target + paths.normalTarget))
 		.pipe( g_sourcemaps.init() )
-		.pipe( g_concat( "mathquill.js" ) )
+		.pipe( g_concat( paths.normalTarget ) )
 		.pipe( gulp.dest( paths.target ) )
 		.pipe( g_rename( { extname: ".min.js" } ) )
 		.pipe( g_uglify() )
