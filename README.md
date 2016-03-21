@@ -16,6 +16,7 @@ Find a dusty corner? Let us know! <big>[<img alt="slackin.mathquill.com" src="ht
 
 This version is a fork focused on preserving the input LaTeX ( in the original verison {} tend to be eaten when they are not "visible" and {{A}^B}^C is merged to A^{BC} ).
 The idea is to stick as close as possible to the original, while maintaining the above requirement.
+I also happen to dislike the Makefile+sed+find build setup, moved to gulp.
 
 ## Usage
 
