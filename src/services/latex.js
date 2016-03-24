@@ -50,7 +50,19 @@ var latexMathParser = (function() {
   // Parsers yielding either MathCommands, or Fragments of MathCommands
   //   (either way, something that can be adopted by a MathBlock)
   var variable = letter.map(function(c) { return Letter(c); });
-  var symbol = regex(/^[^${}\\_^]/).map(function(c) { return VanillaSymbol(c); });
+  function buildUnicodeAwareRegEx() {
+    // fame and glory to the good peolple at : https://mothereff.in/regexpu and https://github.com/mathiasbynens/regexpu 
+    var unicodeAwareRegEx = null;
+    try {
+      unicodeAwareRegEx = new RegExp('^[^${}\\_^]', 'u');
+    }
+    catch (ex) {
+      unicodeAwareRegEx = new RegExp('^(?:[\0-#%-\[\]`-z\|~-\uD7FF\uE000-\uFFFF]|[\u2102-\u214F]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])');
+    }
+    return unicodeAwareRegEx;
+  }
+  var unicodeAwareRegEx = buildUnicodeAwareRegEx();
+  var symbol = regex(unicodeAwareRegEx).map(function(c) { return VanillaSymbol(c); });
 
   var controlSequence =
     regex(/^[^\\a-eg-zA-Z]/) // hotfix #164; match MathBlock::write
