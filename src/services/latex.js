@@ -54,10 +54,11 @@ var latexMathParser = (function() {
     // fame and glory to the good peolple at : https://mothereff.in/regexpu and https://github.com/mathiasbynens/regexpu 
     var unicodeAwareRegEx = null;
     try {
-      unicodeAwareRegEx = new RegExp('^[^${}\\_^]', 'u');
+      // note : no regex syntax /.../u  : does not flies thru gulp concat processing (currently only implemented in IE11, Edge, FF46+ )
+      unicodeAwareRegEx = new RegExp('^[^${}\\\\_^]', 'u');
     }
     catch (ex) {
-      unicodeAwareRegEx = new RegExp('^(?:[\0-#%-\[\]`-z\|~-\uD7FF\uE000-\uFFFF]|[\u2102-\u214F]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])');
+      unicodeAwareRegEx = /^(?:[\0-#%-\[\]`-z\|~-\uD7FF\uE000-\uFFFF]|[\u2102-\u214F]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])/;
     }
     return unicodeAwareRegEx;
   }
