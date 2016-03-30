@@ -99,7 +99,7 @@ var TextColor = LatexCmds.textcolor = P(MathCommand, function(_, super_) {
       '<span class="mq-textcolor" style="color:' + color + '">&0</span>';
   };
   _.latex = function() {
-    return '\\textcolor{' + this.color + '}{' + this.blocks[0].latex() + '}';
+    return '\\textcolor{' + this.color + '}'+this.simplifyLaTeX(this.blocks[0]);
   };
   _.parser = function() {
     var self = this;
@@ -276,7 +276,7 @@ var SupSub = P(MathCommand, function(_, super_) {
   _.latex = function() {
     function latex(prefix, block) {
       var l = block && block.latex();
-      return block ? prefix + (l.length === 1 ? l : '{' + (l || ' ') + '}') : '';
+      return block ? prefix + (((block instanceof ExplicitMathBlock) || l.length === 1 )? l : '{' + (l || ' ') + '}') : '';
     }
     return latex('_', this.sub) + latex('^', this.sup);
   };
@@ -412,11 +412,8 @@ var SummationNotation = P(MathCommand, function(_, super_) {
     }
   };
   _.latex = function() {
-    function simplify(latex) {
-      return latex.length === 1 ? latex : '{' + (latex || ' ') + '}';
-    }
-    return this.ctrlSeq + '_' + simplify(this.ends[L].latex()) +
-      '^' + simplify(this.ends[R].latex());
+    return this.ctrlSeq + '_' + this.simplifyLaTeX(this.ends[L]) +
+      '^' + this.simplifyLaTeX(this.ends[R]);
   };
   _.parser = function() {
     var string = Parser.string;
@@ -620,7 +617,7 @@ LatexCmds.nthroot = P(SquareRoot, function(_, super_) {
   ;
   _.textTemplate = ['sqrt[', '](', ')'];
   _.latex = function() {
-    return '\\sqrt['+this.ends[L].latex()+']{'+this.ends[R].latex()+'}';
+    return '\\sqrt['+this.ends[L].latex()+']'+this.simplifyLaTeX(this.ends[R]);
   };
 });
 

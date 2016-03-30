@@ -270,11 +270,14 @@ var MathCommand = P(MathElement, function(_, super_) {
       return ' mathquill-block-id=' + blocks[$1].id + '>' + blocks[$1].join('html');
     });
   };
-
+  _.simplifyLaTeX = function( block ) {
+    var latex = block.latex();
+    return ((block instanceof ExplicitMathBlock) || latex.length === 1) ? latex : '{' + (latex || ' ') + '}';
+  };
   // methods to export a string representation of the math tree
   _.latex = function() {
     return this.foldChildren(this.ctrlSeq, function(latex, child) {
-      return latex + '{' + (child.latex() || ' ') + '}';
+      return latex + this.simplifyLaTeX(child);
     });
   };
   _.textTemplate = [''];
@@ -355,6 +358,10 @@ var MathBlock = P(MathElement, function(_, super_) {
     });
   };
   _.html = function() { return this.join('html'); };
+  _.simplifyLaTeX = function( block ) {
+    var latex = block.latex();
+    return ((block instanceof ExplicitMathBlock) || latex.length === 1) ? latex : '{' + (latex || ' ') + '}';
+  };
   _.latex = function() { return this.join('latex'); };
   _.text = function() {
     return (this.ends[L] === this.ends[R] && this.ends[L] !== 0) ?
@@ -468,7 +475,8 @@ var ExplicitMathBlock = P(MathBlock, function(_, super_) {
     return '<span class="mq-non-leaf" mathquill-block-id=' + this.id + '>' + this.join('html') + '</span>';
   };
   _.latex = function() { 
-    return '{' + this.join('latex') + '}';
+    var latex = this.join('latex');
+    return '{' + (latex || ' ') + '}';
   };
   
   // editability methods: called by the cursor for editing, cursor movements,
