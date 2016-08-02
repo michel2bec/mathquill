@@ -304,6 +304,23 @@ suite('Public API', function() {
       });
     }
   });
+  
+  suite('edit handler', function() {
+    test('fires when closing a bracket expression', function() {
+      var count = 0;
+      var mq = MQ.MathField($('<span>').appendTo('#mock')[0], {
+        handlers: {
+          edit: function() {
+            count += 1;
+          }
+        }
+      });
+      mq.typedText('(3, 4');
+      var countBeforeClosingBracket = count;
+      mq.typedText(']');
+      assert.equal(count, countBeforeClosingBracket + 1);
+    });
+  });
 
   suite('.cmd(...)', function() {
     var mq;
@@ -744,6 +761,20 @@ suite('Public API', function() {
 
       $(mq.el()).remove();
     });
+    test('integral still has empty limits', function() {
+      var mq = MQ.MathField($('<span>').appendTo('#mock')[0], {
+        sumStartsWithNEquals: true
+      });
+      assert.equal(mq.latex(), '');
+
+      mq.cmd('\\int');
+      assert.equal(mq.latex(), '\\int_{ }^{ }');
+
+      mq.cmd('0');
+      assert.equal(mq.latex(), '\\int_0^{ }', 'cursor in the from block');
+
+      $(mq.el()).remove();
+    });
   });
 
   suite('substituteTextarea', function() {
@@ -758,6 +789,58 @@ suite('Public API', function() {
       mq.write('asdf');
       mq.select();
 
+      $(mq.el()).remove();
+    });
+  });
+
+  suite('clickAt', function() {
+    test('inserts at coordinates', function() {
+      // Insert filler so that the page is taller than the window so this test is deterministic
+      // Test that we use clientY instead of pageY
+      var windowHeight = $(window).height();
+      var filler = $('<div>').height(windowHeight);
+      filler.insertBefore('#mock');
+
+      var mq = MQ.MathField($('<span>').appendTo('#mock')[0]);
+      mq.typedText("mmmm/mmmm");
+      mq.el().scrollIntoView();
+
+      var box = mq.el().getBoundingClientRect();
+      var clientX = box.left + 30;
+      var clientY = box.top + 30;
+      var target = document.elementFromPoint(clientX, clientY);
+
+      assert.equal(document.activeElement, document.body);
+      mq.clickAt(clientX, clientY, target).write('x');
+      assert.equal(document.activeElement, $(mq.el()).find('textarea')[0]);
+
+      assert.equal(mq.latex(), "\\frac{mmmm}{mmxmm}");
+
+      filler.remove();
+      $(mq.el()).remove();
+    });
+    test('target is optional', function() {
+      // Insert filler so that the page is taller than the window so this test is deterministic
+      // Test that we use clientY instead of pageY
+      var windowHeight = $(window).height();
+      var filler = $('<div>').height(windowHeight);
+      filler.insertBefore('#mock');
+
+      var mq = MQ.MathField($('<span>').appendTo('#mock')[0]);
+      mq.typedText("mmmm/mmmm");
+      mq.el().scrollIntoView();
+
+      var box = mq.el().getBoundingClientRect();
+      var clientX = box.left + 30;
+      var clientY = box.top + 30;
+
+      assert.equal(document.activeElement, document.body);
+      mq.clickAt(clientX, clientY).write('x');
+      assert.equal(document.activeElement, $(mq.el()).find('textarea')[0]);
+
+      assert.equal(mq.latex(), "\\frac{mmmm}{mmxmm}");
+
+      filler.remove();
       $(mq.el()).remove();
     });
   });
@@ -792,7 +875,7 @@ suite('Public API', function() {
 
       mq.el().scrollIntoView();
 
-      mq.dropEmbedded(mqx + 30, mqy + 40, {
+      mq.dropEmbedded(mqx + 30, mqy + 30, {
         htmlString: '<span class="embedded-html"></span>',
         text: function () { return "embedded text" },
         latex: function () { return "embedded latex" }

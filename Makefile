@@ -1,4 +1,23 @@
 #
+# -*- Prerequisites -*-
+#
+
+# the fact that 'I am Node.js' is unquoted here looks wrong to me but it
+# CAN'T be quoted, I tried. Apparently in GNU Makefiles, in the paren+comma
+# syntax for conditionals, quotes are literal; and because the $(shell...)
+# call has parentheses and single and double quotes, the quoted syntaxes
+# don't work (I tried), we HAVE to use the paren+comma syntax
+ifneq ($(shell node -e 'console.log("I am Node.js")'), I am Node.js)
+  ifeq ($(shell nodejs -e 'console.log("I am Node.js")' 2>/dev/null), I am Node.js)
+    $(error You have /usr/bin/nodejs but no /usr/bin/node, please 'sudo apt-get install nodejs-legacy' (see http://stackoverflow.com/a/21171188/362030 ))
+  endif
+
+  $(error Please install Node.js: https://nodejs.org/ )
+endif
+
+
+
+#
 # -*- Configuration -*-
 #
 
@@ -117,7 +136,7 @@ $(BASIC_CSS): $(CSS_SOURCES) $(NODE_MODULES_INSTALLED) $(BUILD_DIR_EXISTS)
 	$(LESSC) --modify-var="basic=true" $(LESS_OPTS) $(CSS_MAIN) > $@
 
 $(NODE_MODULES_INSTALLED): package.json
-	npm install
+	NODE_ENV=development npm install
 	touch $(NODE_MODULES_INSTALLED)
 
 $(BUILD_DIR_EXISTS):
