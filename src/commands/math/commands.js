@@ -99,7 +99,6 @@ var TextColor = LatexCmds.textcolor = P(MathCommand, function(_, super_) {
       '<span class="mq-textcolor" style="color:' + color + '">&0</span>';
   };
   _.latex = function() {
-
     return '\\textcolor{' + this.color + '}'+this.simplifyLaTeX(this.blocks[0]);
   };
   _.parser = function() {
@@ -369,33 +368,6 @@ LatexCmds['^'] = P(SupSub, function(_, super_) {
   };
 });
 
-var Overset =
-LatexCmds.overset = P(MathCommand, function (_, super_ ) {
-  _.ctrlSeq = "\\overset";
-  _.htmlTemplate = '<span class="mq-over mq-non-leaf">'
-    + '<span class="mq-hat-prefix">&0</span>' 
-    + '<span class="mq-hat-stem">&1</span>'
-    + "</span>";
-  _.textTemplate = ["overset{", "}{",'}'];
-  _.finalizeTree = function() {
-    this.upInto = this.ends[R].upOutOf = this.ends[L];
-    this.downInto = this.ends[L].downOutOf = this.ends[R];
-  };
-});
-var Underset =
-LatexCmds.underset = P(MathCommand, function (_, super_ ) {
-  _.ctrlSeq = "\\underset";
-  _.htmlTemplate = '<span class="mq-under mq-non-leaf">'
-    + '<span class="mq-hat-stem">&1</span>'
-    + '<span class="mq-hat-prefix">&0</span>'
-    + "</span>";
-  _.textTemplate = ["underset{", "}{",'}'];
-  _.finalizeTree = function() {
-    this.upInto = this.ends[R].upOutOf = this.ends[L];
-    this.downInto = this.ends[L].downOutOf = this.ends[R];
-  };
-});
-
 var SummationNotation = P(MathCommand, function(_, super_) {
   _.init = function(ch, html) {
     var htmlTemplate =
@@ -525,6 +497,33 @@ CharCmds['/'] = P(Fraction, function(_, super_) {
       }
     }
     super_.createLeftOf.call(this, cursor);
+  };
+});
+
+var Underset =
+LatexCmds.underset = P(MathCommand, function (_, super_ ) {
+  _.ctrlSeq = '\\underset';
+  _.htmlTemplate = '<span class="mq-underset mq-overunder mq-non-leaf">'
+    + '<span class="mq-over">&1</span>' 
+    + '<span class="mq-under">&0</span>'
+    + '</span>';
+  _.textTemplate = ["overset{", "}{",'}'];
+  _.finalizeTree = function() {
+    this.downInto = this.ends[L].upOutOf = this.ends[R];
+    this.upInto = this.ends[R].downOutOf = this.ends[L];
+  };
+});
+var Overset =
+LatexCmds.overset = P(MathCommand, function (_, super_ ) {
+  _.ctrlSeq = '\\overset';
+  _.htmlTemplate = '<span class="mq-overset mq-overunder mq-non-leaf">'
+    + '<span class="mq-over">&0</span>'
+    + '<span class="mq-under">&1</span>'
+    + '</span>';
+  _.textTemplate = ["underset{", "}{",'}'];
+  _.finalizeTree = function() {
+    this.downInto = this.ends[R].upOutOf = this.ends[L];
+    this.upInto = this.ends[L].downOutOf = this.ends[R];
   };
 });
 

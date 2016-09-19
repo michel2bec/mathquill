@@ -192,19 +192,6 @@
     }
   }
 
-  .mq-under {
-    font-size: 90%;
-    vertical-align: -.5em;
-    &.mq-vector-prefix {
-      font-size: 80%;
-    }
-  }
-  .mq-over {
-    font-size: 90%;
-    &.mq-vector-prefix {
-      font-size: 80%;
-    }
-  }
   sup.mq-nthroot {
     font-size: 80%;
     vertical-align: 0.8em;
@@ -293,6 +280,29 @@
     float: right; // take out of normal flow to manipulate baseline
     width: 100%;
     padding: 0.1em;
+  }
+
+  ////
+  // \overset & \underset
+  // overset and underset text
+  .mq-overunder {
+    text-align: center;
+    position: relative;
+    top: .01em;
+
+    // fix \mathbf vertical alignment issue
+    .mq-font {
+      font-family: inherit;
+    }
+
+    &.mq-underset {
+      vertical-align: text-top;
+    }
+
+    &.mq-underset .mq-under, &.mq-overset .mq-over {
+      display: block;
+      font-size: 0.7em;
+    }
   }
 
   ////
