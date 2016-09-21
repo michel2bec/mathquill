@@ -258,12 +258,12 @@
 
   // Firefox 2 (and older?) only
   // because display:inline-block is FUBAR in Gecko < 1.9.0
-  .mq-fraction, .mq-large-operator, .mq-large-operator-key, x:-moz-any-link {
+  .mq-fraction, .mq-large-operator, x:-moz-any-link {
     display: -moz-groupbox;
   }
 
   // Firefox 3+ (Gecko 1.9.0+)
-  .mq-fraction, .mq-large-operator, .mq-large-operator-key, x:-moz-any-link, x:default {
+  .mq-fraction, .mq-large-operator, x:-moz-any-link, x:default {
     display: inline-block;
   }
 
@@ -390,29 +390,6 @@
     .mq-from {
       float: right; /* take out of normal flow to manipulate baseline */
       width: 100%;
-    }
-  }
-
-  // BT4083 : somme indice vs somme de 1 à n
-  
-  .mq-large-operator-key {
-    > big {
-      vertical-align: -.1em;
-      padding: .2em;
-    }
-
-    > .mq-supsub {
-      font-size: 80%;
-      vertical-align: -1.1em;
-      padding-right: .2em;
-
-      > .mq-sup > .mq-sup-inner {
-        vertical-align: 1.3em;
-      }
-
-      > .mq-sub {
-        margin-left: -.30em;
-      }
     }
   }
 

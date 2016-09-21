@@ -421,12 +421,9 @@ var SummationNotation = P(MathCommand, function(_, super_) {
 var SummationNotationKey = P(MathCommand, function(_, super_) {
   _.init = function(ch, html) {
     var htmlTemplate =
-      '<span class="mq-large-operator-key mq-non-leaf">'
+    '<span class="mq-large-operator mq-non-leaf">'
     +   '<big>'+html+'</big>'
-	+   '<span class="mq-supsub mq-non-leaf">'
-    +     '<span class="mq-sub">&0</span>'
-    +     '<span style="display:inline-block;width:0">&#8203</span>'
-    +   '</span>'
+    +   '<span class="mq-from"><span>&0</span></span>'
     + '</span>'
     ;
     Symbol.prototype.init.call(this, ch, htmlTemplate);
