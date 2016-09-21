@@ -417,6 +417,55 @@ var SummationNotation = P(MathCommand, function(_, super_) {
     this.ends[R].downOutOf = this.ends[L];
   };
 });
+// BT4083 : somme indice vs somme de 1 à n
+var SummationNotationKey = P(MathCommand, function(_, super_) {
+  _.init = function(ch, html) {
+    var htmlTemplate =
+      '<span class="mq-large-operator-key mq-non-leaf">'
+    +   '<big>'+html+'</big>'
+	+   '<span class="mq-supsub mq-non-leaf">'
+    +     '<span class="mq-sub">&0</span>'
+    +     '<span style="display:inline-block;width:0">&#8203</span>'
+    +   '</span>'
+    + '</span>'
+    ;
+    Symbol.prototype.init.call(this, ch, htmlTemplate);
+  };
+  _.latex = function() {
+    return this.ctrlSeq + '_' + this.simplifyLaTeX(this.ends[L]);
+  };
+  _.parser = function() {
+    var string = Parser.string;
+    var optWhitespace = Parser.optWhitespace;
+    var succeed = Parser.succeed;
+    var block = latexMathParser.block;
+
+    var self = this;
+    var blocks = self.blocks = [ MathBlock(), MathBlock() ];
+    for (var i = 0; i < blocks.length; i += 1) {
+      blocks[i].adopt(self, self.ends[R], 0);
+    }
+
+    return optWhitespace.then(string('_')).then(function(supOrSub) {
+      if( supOrSub === '_' ) {
+        var child = blocks[0];
+        return block.then(function(block) {
+          block.children().adopt(child, child.ends[R], 0);
+          return succeed(self);
+        });
+	  }
+    }).many().result(self);
+  };
+  _.finalizeTree = function() {
+    this.downInto = this.ends[L]; // ok
+    this.upInto = this.ends[R]; // à voir
+    this.ends[L].upOutOf = this.ends[R]; // à voir ?
+    this.ends[R].downOutOf = this.ends[L]; // ok ?
+  };
+});
+
+LatexCmds.sumk = bind(SummationNotationKey,'\\sumk ','&sum;');
+LatexCmds.prodk = bind(SummationNotationKey,'\\prodk ','&prod;');
 
 LatexCmds['∑'] =
 LatexCmds.sum =
@@ -480,12 +529,13 @@ CharCmds['/'] = P(Fraction, function(_, super_) {
           leftward instanceof BinaryOperator ||
           leftward instanceof (LatexCmds.text || noop) ||
           leftward instanceof SummationNotation ||
+          leftward instanceof SummationNotationKey ||
           leftward.ctrlSeq === '\\ ' ||
           /^[,;:]$/.test(leftward.ctrlSeq)
         ) //lookbehind for operator
       ) leftward = leftward[L];
 
-      if (leftward instanceof SummationNotation && leftward[R] instanceof SupSub) {
+      if ((leftward instanceof SummationNotation || leftward instanceof SummationNotationKey )&& leftward[R] instanceof SupSub) {
         leftward = leftward[R];
         if (leftward[R] instanceof SupSub && leftward[R].ctrlSeq != leftward.ctrlSeq)
           leftward = leftward[R];
@@ -617,8 +667,8 @@ LatexCmds.ddot = bind(DiacriticAbove, '\\ddot', '&#x0308;', ['ddot(', ')']); // 
 LatexCmds.check = bind(DiacriticAbove, '\\check', '&#x030C', ['check(', ')']); // aka caron/hacek
 // Unicode "Combining Diacritical Marks for Symbols"
 LatexCmds.vec = bind(DiacriticAbove, '\\vec', '&#x20D7;', ['vec(', ')']);
-LatexCmds.dddot = bind(DiacriticAbove, '\\dddots', '&#x20DB;', ['dddot(', ')']);
-LatexCmds.ddddot = bind(DiacriticAbove, '\\dddots', '&#x20DC;', ['ddddot(', ')']);
+LatexCmds.dddot = bind(DiacriticAbove, '\\dddot', '&#x20DB;', ['dddot(', ')']);
+LatexCmds.ddddot = bind(DiacriticAbove, '\\ddddot', '&#x20DC;', ['ddddot(', ')']);
 
 function DelimsMixin(_, super_) {
   _.jQadd = function() {
