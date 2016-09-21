@@ -102,3 +102,4 @@ gulp.task( "test:mathquill-full", ["font", "css", "build+bundle+min:basic", "bui
 
 gulp.task( "bundle+min:mathquill-full", ["font", "css", "build+bundle+min"] );
 
+gulp.task( "all", ["test:mathquill-full", "bundle+min:mathquill-full"] );
