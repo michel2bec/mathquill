@@ -16,7 +16,7 @@ LatexCmds["\u2571"] = LatexCmds.diagup = bind(BinaryOperator, "\\diagup ", "&#x2
 LatexCmds["\u2572"] = LatexCmds.diagdown = bind(BinaryOperator, "\\diagdown ", "&#x2572;");
 LatexCmds['≠'] = LatexCmds.ne = LatexCmds.neq = bind(BinaryOperator,'\\ne ','&ne;');
 
-LatexCmds['∗'] = LatexCmds.ast = LatexCmds.star = LatexCmds.loast = LatexCmds.lowast =
+LatexCmds['\u2217'] = LatexCmds.ast = LatexCmds.star = LatexCmds.loast = LatexCmds.lowast =
   bind(BinaryOperator,'\\ast ','&lowast;');
   //case 'there4 = // a special exception for this one, perhaps?
 LatexCmds.therefor = LatexCmds.therefore =
