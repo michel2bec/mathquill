@@ -558,10 +558,10 @@ LatexCmds.underset = P(MathCommand, function (_, super_ ) {
     + '<span class="mq-over">&1</span>' 
     + '<span class="mq-under">&0</span>'
     + '</span>';
-  _.textTemplate = ["overset{", "}{",'}'];
+  _.textTemplate = ["underset{", "}{",'}'];
   _.finalizeTree = function() {
-    this.downInto = this.ends[L].upOutOf = this.ends[R];
-    this.upInto = this.ends[R].downOutOf = this.ends[L];
+    this.downInto = this.ends[R].downOutOf = this.ends[L];
+    this.upInto = this.ends[L].upOutOf = this.ends[R];
   };
 });
 var Overset =
@@ -571,10 +571,10 @@ LatexCmds.overset = P(MathCommand, function (_, super_ ) {
     + '<span class="mq-over">&0</span>'
     + '<span class="mq-under">&1</span>'
     + '</span>';
-  _.textTemplate = ["underset{", "}{",'}'];
+  _.textTemplate = ["overset{", "}{",'}'];
   _.finalizeTree = function() {
-    this.downInto = this.ends[R].upOutOf = this.ends[L];
-    this.upInto = this.ends[L].downOutOf = this.ends[R];
+    this.downInto = this.ends[L].downOutOf = this.ends[R];
+    this.upInto = this.ends[R].upOutOf = this.ends[L];
   };
 });
 
