@@ -18,7 +18,7 @@ LatexCmds['≠'] = LatexCmds.ne = LatexCmds.neq = bind(BinaryOperator,'\\ne ','&
 
 LatexCmds['\u2217'] = LatexCmds.ast = LatexCmds.star = LatexCmds.loast = LatexCmds.lowast =
   bind(BinaryOperator,'\\ast ','&lowast;');
-  //case 'there4 = // a special exception for this one, perhaps?
+
 LatexCmds.therefor = LatexCmds.therefore =
   bind(BinaryOperator,'\\therefore ','&there4;');
 
@@ -316,9 +316,9 @@ LatexCmds.nexists = LatexCmds.nexist =
       bind(VanillaSymbol, '\\nexists ', '&#8708;');
 
 LatexCmds.and = LatexCmds.land = LatexCmds.wedge =
-  bind(VanillaSymbol,'\\wedge ','&and;');
+  bind(BinaryOperator,'\\wedge ','&and;');
 
-LatexCmds.or = LatexCmds.lor = LatexCmds.vee = bind(VanillaSymbol,'\\vee ','&or;');
+LatexCmds.or = LatexCmds.lor = LatexCmds.vee = bind(BinaryOperator,'\\vee ','&or;');
 
 LatexCmds.o = LatexCmds.O =
 LatexCmds.empty = LatexCmds.emptyset =
