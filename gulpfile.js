@@ -19,7 +19,7 @@ var paths = {
 	fullSources: [],
 	cssSources: "src/css/*/*.less",
 	cssMain: "src/css/main.less",
-	fonts: "src/font/*",
+	fonts: "src/fonts/*",
 	target: "build/",
 	lessc: "./node_modules/.bin/lessc",
   unittest: "test/unit/*.test.js",
@@ -32,7 +32,7 @@ paths.fullSources = [paths.intro].concat( paths.baseSources ).concat( paths.comm
 paths.basicSources = [paths.intro].concat( paths.baseSources ).concat( paths.coreSources ).concat( [paths.outro] );
 paths.unitTestSources = [paths.intro].concat( paths.baseSources ).concat( paths.commandsSources ).concat( [paths.unittest] ).concat( [paths.outro] );
 
-gulp.task( "font", function( cb ) {
+gulp.task( "fonts", function( cb ) {
 			// copie tel quel
 	gulp.src( [
 			paths.fonts
@@ -98,8 +98,8 @@ gulp.task( "build+bundle+min:basic", function( cb ) {
 	return cb();
 } );
 
-gulp.task( "test:mathquill-full", ["font", "css", "build+bundle+min:basic", "build-test"] );
+gulp.task( "test:mathquill-full", ["fonts", "css", "build+bundle+min:basic", "build-test"] );
 
-gulp.task( "bundle+min:mathquill-full", ["font", "css", "build+bundle+min"] );
+gulp.task( "bundle+min:mathquill-full", ["fonts", "css", "build+bundle+min"] );
 
 gulp.task( "all", ["test:mathquill-full", "bundle+min:mathquill-full"] );
