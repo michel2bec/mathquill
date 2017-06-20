@@ -1,5 +1,5 @@
 call "%ProgramFiles%\nodejs\nodevars.bat"
-call npm install npm -g
+rem call npm install npm -g
 rem call npm link npm
 rem call npm install less -g
 rem call npm link less
@@ -23,4 +23,4 @@ call npm install del -g
 call npm link del
 call npm install mocha -g
 call npm link mocha
-call npm install pjs@3.1.0 --ignore-scripts
+call npm install pjs@4.0.0 --ignore-scripts

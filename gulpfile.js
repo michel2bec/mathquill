@@ -11,8 +11,8 @@ var gulp = require("gulp"),
 		del = require('del');
 		
 var paths = {
-	baseSources: ["./node_modules/pjs/src/p.js","src/tree.js","src/cursor.js","src/controller.js","src/publicapi.js","src/services/*.util.js","src/services/*.js"],
-  commandsSources: ["src/commands/*.js","src/commands/*/*.js"],
+	baseSources: ["./node_modules/pjs/src/p.js","src/tree.js","src/cursor.js","src/controller.js","src/publicapi.js","src/services/saneKeyboardEvents.util.js", "src/services/parser.util.js","src/services/exportText.js","src/services/focusBlur.js","src/services/keystroke.js","src/services/latex.js","src/services/mouse.js","src/services/scrollHoriz.js","src/services/textarea.js"],
+  commandsSources: ["src/commands/math.js","src/commands/text.js","src/commands/math/*.js"],
   coreSources: ["src/commands/math.js","src/commands/basicSymbols.js","src/commands/commands.js"],
 	intro: "src/intro.js",
 	outro: "src/outro.js",
