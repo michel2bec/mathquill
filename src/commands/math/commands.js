@@ -517,6 +517,15 @@ LatexCmds.fraction = P(MathCommand, function(_, super_) {
     this.upInto = this.ends[R].upOutOf = this.ends[L];
     this.downInto = this.ends[L].downOutOf = this.ends[R];
   };
+  _.latex = function() {
+    var tmpL = this.simplifyLaTeX(this.ends[L]);
+	if( tmpL.slice( 0, 1 ) != '{' )
+      tmpL = '{' + tmpL + '}';
+    var tmpR = this.simplifyLaTeX(this.ends[R]);
+	if( tmpR.slice( 0, 1 ) != '{' )
+      tmpR = '{' + tmpR + '}';
+    return this.ctrlSeq + tmpL + tmpR;
+  };
 });
 
 var LiveFraction =
