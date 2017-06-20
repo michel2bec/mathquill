@@ -192,7 +192,11 @@ function getInterface(v) {
         var cmd0 = cmd.slice( 0, ix0 + 1 );
         var cmd1 = cmd.slice( ix0 + 2 );
         if (cursor.selection) {
-         var dansSel = cursor.selection.join( 'latex' );
+          var dansSel = cursor.selection.join( 'latex' );
+          var first = dansSel.slice( 0, 1 );
+          if( first ==='_' || first === '^' )
+              dansSel = '{\\, }' + dansSel;
+          // BT4823 - checks if badly selected left subscript / superscript
           this.write( cmd0 + dansSel + cmd1 );
         } else {
           this.write( cmd0 + cmd1 );
@@ -204,6 +208,10 @@ function getInterface(v) {
           var cmd1 = cmd.slice( ix0 + 1 );
           if (cursor.selection) {
             var dansSel = cursor.selection.join( 'latex' );
+            // BT4823 - checks if badly selected left subscript / superscript
+            var first = dansSel.slice( 0, 1 );
+            if( first ==='_' || first === '^' )
+              dansSel = '{\\, }' + dansSel;
             this.write( cmd0 + dansSel + cmd1 );
           } else {
             this.write( cmd0 + cmd1 );
