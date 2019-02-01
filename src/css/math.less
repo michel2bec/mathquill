@@ -174,11 +174,15 @@
 
     &.mq-sup-only {
       vertical-align: .5em;
-
       .mq-sup {
         display: inline-block;
         vertical-align: text-bottom;
       }
+    }
+
+    &:not(.mq-sup-only) .mq-sup {
+      /* BT5640 : Mauvais affichage des symboles situés dans l'emplacement de puissance. */
+      display: block;
     }
 
     .mq-sup {
