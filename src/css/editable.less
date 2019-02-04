@@ -1,5 +1,8 @@
 .mq-editable-field {
   .inline-block;
+  .inline-block;
+  /* BT5417 : Le padding est placé sur le conteneur parent afin d'éviter tout bug d'affichage sur overflow: scroll dans IE11 et Edge. */ 
+  padding: 2px;
   .mq-cursor {
     border-left: 2px solid black;
     margin-left: -1px;
