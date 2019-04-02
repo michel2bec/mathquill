@@ -1,3 +1,4 @@
+//mathquill/src/cursor.js
 /********************************************
  * Cursor and Selection "singleton" classes
  *******************************************/

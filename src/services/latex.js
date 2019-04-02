@@ -1,3 +1,4 @@
+//mathquill/src/services/latex.js
 // Parser MathBlock
 var latexMathParser = (function() {
   function commandToBlock(cmd) { // can also take in a Fragment

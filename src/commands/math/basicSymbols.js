@@ -1,3 +1,4 @@
+//mathquill/src/commands/math/basicSymbols.js
 /*********************************
  * Symbols for Basic Mathematics
  ********************************/

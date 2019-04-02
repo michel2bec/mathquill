@@ -1,3 +1,4 @@
+//mathquill/src/commands/math.js
 /*************************************************
  * Abstract classes of math blocks and commands.
  ************************************************/

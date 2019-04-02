@@ -1,3 +1,4 @@
+//mathquill/src/tree.js
 /*************************************************
  * Base classes of edit tree-related objects
  *

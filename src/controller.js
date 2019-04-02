@@ -1,3 +1,4 @@
+//mathquill/src/controller.js
 /*********************************************
  * Controller for a MathQuill instance,
  * on which services are registered with

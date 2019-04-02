@@ -1,3 +1,4 @@
+//mathquill/src/commands/text.js
 /*************************************************
  * Abstract classes of text blocks
  ************************************************/

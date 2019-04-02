@@ -1,3 +1,4 @@
+//mathquill/src/services/parser.util.js
 var Parser = P(function(_, super_, Parser) {
   // The Parser object is a wrapper for a parser function.
   // Externally, you use one to parse a string by calling

@@ -1,3 +1,4 @@
+//mathquill/src/services/textarea.js
 /*********************************************
  * Manage the MathQuill instance's textarea
  * (as owned by the Controller)

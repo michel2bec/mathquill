@@ -1,3 +1,4 @@
+//mathquill/src/services/focusBlur.js
 Controller.open(function(_) {
   _.focusBlurEvents = function() {
     var ctrlr = this, root = ctrlr.root, cursor = ctrlr.cursor;

@@ -1,3 +1,4 @@
+//mathquill/src/services/mouse.js
 /********************************************************
  * Deals with mouse events for clicking, drag-to-select
  *******************************************************/

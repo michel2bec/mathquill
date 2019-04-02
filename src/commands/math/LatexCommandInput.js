@@ -1,3 +1,4 @@
+//mathquill/src/commands/math/LatexCommandInput.js
 /****************************************
  * Input box to type backslash commands
  ***************************************/

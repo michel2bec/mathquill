@@ -1,3 +1,4 @@
+//mathquill/src/commands/math/advancedSymbols.js
 /************************************
  * Symbols for Advanced Mathematics
  ***********************************/

@@ -1,3 +1,4 @@
+//mathquill/src/intro.js
 /**
  * MathQuill {VERSION}, by Han, Jeanine, and Mary
  * http://mathquill.com | maintainers@mathquill.com

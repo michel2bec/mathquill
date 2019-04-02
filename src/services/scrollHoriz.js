@@ -1,3 +1,4 @@
+//mathquill/src/services/scrollHoriz.js
 /***********************************************
  * Horizontal panning for editable fields that
  * overflow their width
