@@ -62,15 +62,6 @@ var Cursor = P(Point, function(_) {
   };
   _.insDirOf = function(dir, el) {
     prayDirection(dir);
-    if( el[dir] 
-      && el[dir].ends
-      && el[dir].ends[L]
-      && el[dir].ends[L] == el[dir].ends[R]
-      && el[dir].ends[L].ctrlSeq === '\\, ' ) {
-      // BT4823 - skip this invisible space
-      if( dir == L )
-        return this.insDirOf(dir, el[dir]);
-    }
     this.jQ.insDirOf(dir, el.jQ);
     this.withDirInsertAt(dir, el.parent, el[dir], el);
     this.parent.jQ.addClass('mq-hasCursor');
@@ -81,14 +72,6 @@ var Cursor = P(Point, function(_) {
 
   _.insAtDirEnd = function(dir, el) {
     prayDirection(dir);
-    if ( el.ends
-      && el.ends[L]
-      && el.ends[L] == el.ends[R]
-      && el.ends[L].ctrlSeq === '\\, ' ) {
-      // BT4823 - skip this invisible space
-      if( el[-dir] )
-        return this.insDirOf( -dir, el[-dir]);
-	} 
     this.jQ.insAtDirEnd(dir, el.jQ);
     this.withDirInsertAt(dir, el, 0, el.ends[dir]);
     el.focus();
