@@ -110,7 +110,7 @@ Controller.open(function(_) {
       }
     }
 	// SINALYS BT4416 : fixes incorrect (but quasi invisible) copy of {\,}^2{A} (prefix) as ^2{A}
-	if (text.slice(0,1) === '^' || text.slice(-1) === '_') {
+	if (text.slice(0,1) === '^' || text.slice(0,1) === '_') {
         text = '{\\,}' + text;
     }
     // FIXME: this always inserts math or a TextBlock, even in a RootTextBlock
