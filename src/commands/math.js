@@ -541,10 +541,32 @@ var ExplicitMathBlock = P(MathBlock, function(_, super_) {
       if (this[dir].focus) { // élément voisin est conteneur
         cursor.insAtDirEnd(-dir, this[dir]);
       } else { // est non conteneur
-        cursor.insDirOf(dir, this[dir]);
+        cursor.insDirOf(dir, this);
       }
+    } else {
+      var parent = this.parent;
+      //Tant que le parent n'est qu'un conteneur et rien de plus, on passe au conteneur supérieur.
+      while (parent[L] == parent[R] && parent.parent && parent instanceof ExplicitMathBlock) {
+        parent = parent.parent;
+      }
+      
+      if (parent.parent) {
+        cursor.insDirOf(dir, parent);
+      }
+      //else do nothing
+      //Nous ne devons pas sortir de la racine.
     }
-    else cursor.insDirOf(dir, this.parent);
+  };
+  _.selectOutOf = function (dir, cursor) {
+    cursor.insDirOf( dir, this );
+  };
+  _.unselectInto = function (dir, cursor) {
+    var enfant = this;
+    //qjarosz 3 avril 2019 : Possibilité de sauter les étapes conteneur intermédiaire mais nécessite d'adapter le selectOutOf.
+    //while (enfant.ends && enfant.ends[L] == enfant.ends[R]) {
+    //  enfant = enfant.ends[L];
+    //}
+    cursor.insAtDirEnd(-dir, enfant);
   };
   // TODO: make these methods part of a shared mixin or something.
   _.selectTowards = MathCommand.prototype.selectTowards;
